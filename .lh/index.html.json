@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 5,
+            "activePatchIndex": 6,
             "patches": [
                 {
                     "date": 1739349696580,
@@ -28,6 +28,10 @@
                 {
                     "date": 1739350333442,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -40,8 +40,9 @@\n                 <img src=\"./images/starbucks_logo.png\" alt=\"STARBUCKS\">\n             </a>\n             <div class=\"sub-menu\">\n                 <ul class=\"menu\">\n+                    <li><a href=\"./overwatch.html\">Fine Meun</a></li>\n                     <li><a href=\"/signin\">Sign In</a></li>\n                     <li><a href=\"javascript:void(0)\">My Starbucks</a></li>\n                     <li><a href=\"javascript:void(0)\">Customer Service & Ideas</a></li>\n                     <li><a href=\"javascript:void(0)\">Find a Store</a></li>\n"
+                },
+                {
+                    "date": 1739350572518,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -40,9 +40,9 @@\n                 <img src=\"./images/starbucks_logo.png\" alt=\"STARBUCKS\">\n             </a>\n             <div class=\"sub-menu\">\n                 <ul class=\"menu\">\n-                    <li><a href=\"./overwatch.html\">Fine Meun</a></li>\n+                    <li><a href=\"./overwatch.html\">Fine Menu</a></li>\n                     <li><a href=\"/signin\">Sign In</a></li>\n                     <li><a href=\"javascript:void(0)\">My Starbucks</a></li>\n                     <li><a href=\"javascript:void(0)\">Customer Service & Ideas</a></li>\n                     <li><a href=\"javascript:void(0)\">Find a Store</a></li>\n@@ -392,21 +392,21 @@\n     <section class=\"visual\">\n       <div class=\"inner\">\n \n         <div class=\"title fade-in\">\n-          <img src=\"images\\visual_title.png\" alt=\"STARBUCKS DELIGHTFUL START TO THE YEARS\">\n+          <img src=\"./images/visual_title.png\" alt=\"STARBUCKS DELIGHTFUL START TO THE YEARS\">\n           <a href=\"javascript:void(0)\" class=\"btn btn--brown\">자세히 보기</a>\n         </div>\n         <div class=\"fade-in\">\n-          <img src=\"images\\visual_cup1.png\" alt=\"new OATMEAL LATTE\" class=\"cup1 image\">\n-          <img src=\"images\\visual_cup1_text.png\" alt=\"오트밀 라떼\" class=\"cup1 text\">\n+          <img src=\"./images/visual_cup1.png\" alt=\"new OATMEAL LATTE\" class=\"cup1 image\">\n+          <img src=\"./images/visual_cup1_text.png\" alt=\"오트밀 라떼\" class=\"cup1 text\">\n         </div>\n         <div class=\"fade-in\">\n-          <img src=\"images\\visual_cup2.png\" alt=\"new STARBUCKS CARAMEL CRUMBLE MOCHA\" class=\"cup2 image\">\n-          <img src=\"images\\visual_cup2_text.png\" alt=\"스타벅스 카라멜 크럼블 모카\" class=\"cup2 text\">\n+          <img src=\"./images/visual_cup2.png\" alt=\"new STARBUCKS CARAMEL CRUMBLE MOCHA\" class=\"cup2 image\">\n+          <img src=\"./images/visual_cup2_text.png\" alt=\"스타벅스 카라멜 크럼블 모카\" class=\"cup2 text\">\n         </div>\n         <div class=\"fade-in\">\n-          <img src=\"images\\visual_spoon.png\" alt=\"Spoon\" class=\"spoon\">\n+          <img src=\"./images/visual_spoon.png\" alt=\"Spoon\" class=\"spoon\">\n         </div>\n \n       </div>\n     </section>\n"
                 }
             ],
             "date": 1739349696579,
