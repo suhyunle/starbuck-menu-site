@@ -79,12 +79,23 @@ body {
   .hero:nth-child(31) .image { background-image: url("../images/hero31.png"); }
   .hero:nth-child(32) .image { background-image: url("../images/hero32.png"); }
   
-  .logo {
+  .choice {
     max-width: 300px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 10px 20px;
+    text-align: center;
+    border: 1px solid #555;
+    border-radius: 10px;
+    box-sizing: border-box;
   }
-  .logo img {
-    width: 100%;
+  .choice p {
+    border: 1px solid #555;
+    border-radius: 10px;
+    box-sizing: border-box;
+    padding: 5px;
+  }
+  .choice img {
+    width: 50%;
+    margin: 10px 0;
   }
   
