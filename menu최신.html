@@ -8,7 +8,24 @@
     <link rel="stylesheet" href="../css/reset.css">
     <link rel="stylesheet" href="../css/menu.css">
     <style>
-        .container { text-align: center; }
+         header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            text-align: center;
+            padding: 10px 0;
+            z-index: 1000; /* 다른 요소 위에 위치 */
+            border-bottom: none;
+        }
+
+        header img {
+            width: 120px; /* 로고 크기 조정 */
+            height: auto;
+        }
+
+        .container { text-align: center; margin-top: 80px;}
         .heroes { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
         .hero { width: 120px; height: 120px; background-color: lightgray; display: flex; align-items: center; justify-content: center; flex-direction: column; }
         .hero img { width: 100px; height: 100px; object-fit: cover; }
@@ -20,6 +37,12 @@
     </style>
 </head>
 <body>
+    <header>
+        <img src="./images/starbucks_logo.png" alt="스타벅스 로고">
+    </header>
+
+
+
     <div class="container">
         <!-- HEROES -->
         <div class="heroes" id="heroes-container"></div>
