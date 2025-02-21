@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goods Menu</title>
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/menu.css">
+
+</head>
+<body>
+    <header>
+        <a href="main.html" class="logo">
+            <img src="./images/starbucks_logo.png" alt="STARBUCKS" />
+        </a>
+
+        <input type="text" id="searchInput" placeholder="굿즈 검색" onkeyup="filterProducts()">
+        <select id="categoryFilter" onchange="filterProducts()">
+            <option value="all">전체</option>
+            <option value="bag">가방</option>
+            <option value="keychain">키체인</option>
+            <option value="tumbler">식기</option>
+        </select>
+    </header>
+
+    <div class="container">
+        <div class="heroes" id="heroes-container"></div>
+
+        <div class="pagination">
+            <button id="prevBtn">이전</button>
+            <span id="pageNumber">1</span>
+            <button id="nextBtn">다음</button>
+        </div>
+    </div>
+
+    <!-- 확대된 이미지 모달 -->
+    <div id="zoomModal" class="zoom-modal">
+        <div class="controls">
+            <button onclick="zoomIn()">+</button>
+            <button onclick="zoomOut()">-</button>
+        </div>
+        <img id="zoomImage" src="" alt="Zoomed Image">
+    </div>
+
+    <script>
+        const goodsList = [
+            { name: "디어러브 하트풀 토트백", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2025/01/[9300000005525]_20250122142424616.jpg", category: "bag" },
+            { name: "러블리수달 키체인 세트 (2P)", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2025/01/[11161720]_20250122112451433.jpg", category: "keychain" },
+            { name: "디어러브 로켓 미러 키체인", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2025/01/[9300000005526]_20250122142633035.jpg", category: "keychain" },
+            { name: "디어러브 볼 앤 커트러리 세트", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2025/02/[9300000005524]_20250205150507224.jpg", category: "tumbler" },
+            { name: "스위티 플러피 버니 키체인", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2025/01/[9300000005527]_20250122142827515.jpg", category: "keychain" },
+            { name: "리저브 레더 코스터 세트 2p", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2024/10/[9300000005293]_20241016131853349.jpg", category: "tumbler" },
+
+                    
+            { name: "라운지 머들러 세트 (2P)", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2024/09/[9300000005295]_20240906143119166.jpg", category: "tumbler" },
+            { name: "(c)스타벅스 하우스 토트백", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004607]_20230905081754149.jpg", category: "bag" },
+            { name: "도도새 엠브로이더리 라지 토트백", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2024/01/[9300000005028]_20240119092140425.jpg", category: "bag" },
+            { name: "도도새 엠브로이더리 미니 토트백", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2024/01/[9300000005029]_20240119092429171.jpg", category: "bag" },
+            { name: "리저브 브라운 레더 파우치", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2024/10/[9300000005294]_20241016131944493.jpg", category: "bag" },
+            { name: "리저브 블랙 레더 파우치", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2024/10/[9300000005444]_20241016132130427.jpg", category: "bag" },
+            { name: "버디 릴와이어 타월", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2022/04/[9300000003983]_20220415142623034.jpg", category: "bag" },
+            { name: "스타벅스 하우스 에코백", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2025/01/[9300000004603]_20250107101841630.jpg", category: "bag" },
+            { name: "우리나라 누비 텀블러 백", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2024/03/[9300000005095]_20240308085805241.jpg", category: "bag" },
+            { name: "이한철-매화서옥도 테이블매트 2P", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2025/01/[9300000005595]_20250107110338051.jpg", category: "tumbler" },
+            { name: "투고 사이렌 리유저블 백", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2024/10/[9300000005582]_20241023132447180.jpg", category: "bag" },
+            { name: "플레이 블루 보틀백", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2025/02/[9300000005756]_20250212124214611.jpg", category: "bag" },
+            { name: "플레이 키즈 쿠킹 에이프런 세트", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2025/02/[9300000005758]_20250212124732380.jpg", category: "bag" },
+            { name: "플레이 핑크 보틀백", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2025/02/[9300000005757]_20250212124448317.jpg", category: "bag" },
+            { name: "(c)그린라인 디저트 플레이트 6인치", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2023/04/[9300000004630]_20230425125738040.jpg", category: "tumbler" },
+            { name: "(c)그린라인 브런치 플레이트 8인치", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2023/04/[9300000004631]_20230425130005319.jpg", category: "tumbler" },
+            { name: "(c)그린라인 파스타 플레이트", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2023/04/[9300000004632]_20230425130206575.jpg", category: "tumbler" },
+            { name: "(c)그린라인 파티 플레이트", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2023/04/[9300000004633]_20230425130414555.jpg", category: "tumbler" },
+            { name: "(c)스타벅스 하우스 장우산", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004606]_20230905081551720.jpg", category: "bag" },
+            { name: "SS 스웰 라운지 아이스 버킷 2L", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2024/09/[9300000005300]_20240906143923790.jpg", category: "tumbler" },
+            { name: "SS 스웰 마블 푸드 컨테이너 3P", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2024/11/[9300000005572]_20241126130528023.jpg", category: "tumbler" },
+            { name: "라운지 오픈 키체인", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2024/09/[9300000005296]_20240906143320222.jpg", category: "keychain" },
+            { name: "리저널 컬렉션 엽서북 안녕", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2024/07/[9300000005197]_20240718103527432.jpg", category: "bag" },
+            { name: "민트 사각 푸드 박스 1000ml", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2021/08/[11123357]_20210803103140123.jpg", category: "tumbler" },
+            { name: "민트 원형 푸드 박스 850ml", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2021/08/[11123356]_20210803102737657.jpg", category: "tumbler" },
+            { name: "백자 꽃모양 디저트 플레이트", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2025/01/[9300000005699]_20250107110524113.jpg", category: "tumbler" },
+            { name: "백자 양각 매화 에스프레소 잔 2P세트", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2025/01/[9300000005700]_20250107111133384.jpg", category: "tumbler" },
+            { name: "사이렌 글라스 컨테이너", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2022/01/[9300000003602]_20220112085835673.jpg", category: "tumbler" },
+
+            { name: "스타벅스 골프 베어리스타 키체인(남자)", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2025/01/[9300000005743]_20250103135004949.jpg", category: "keychain" },
+            { name: "스타벅스 러닝 베어리스타 키체인", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2025/01/[9300000005745]_20250103135410628.jpg", category: "keychain" },
+            { name: "스타벅스 배구 베어리스타 키체인", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2025/01/[9300000005751]_20250103140617366.jpg", category: "keychain" },
+            { name: "스타벅스 베어리스타 키체인 세트2", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2025/01/[9300000005752]_20250103140807244.jpg", category: "keychain" },
+            { name: "스타벅스 수영 베어리스타 키체인(여자)", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2025/01/[9300000005746]_20250103135557229.jpg", category: "keychain" },
+            { name: "스타벅스 스노우보드 베어리스타 키체인", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2025/01/[9300000005748]_20250103140017371.jpg", category: "keychain" },
+            { name: "스타벅스 피겨스케이트 베어리스타 키체인", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2025/01/[9300000005749]_20250103140209393.jpg", category: "keychain" },
+            { name: "안녕 강원 베어리스타 키체인", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2024/07/[9300000005102]_20240718102933507.jpg", category: "keychain" },
+            { name: "안녕 경기 베어리스타 키체인", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2024/07/[9300000005101]_20240718102748620.jpg", category: "keychain" },
+            { name: "안녕 경주 베어리스타 키체인", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2024/07/[9300000005100]_20240718102546125.jpg", category: "keychain" },
+            { name: "안녕 부산 베어리스타 키체인", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2024/07/[9300000005098]_20240718102140412.jpg", category: "keychain" },
+            { name: "안녕 서울 베어리스타 키체인", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2024/07/[9300000005097]_20240718101953324.jpg", category: "keychain" },
+            { name: "안녕 전라 베어리스타 키체인", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2024/07/[9300000005104]_20240718103243560.jpg", category: "keychain" },
+            { name: "안녕 제주 베어리스타 키체인", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2024/07/[9300000005099]_20240718102348519.jpg", category: "keychain" },
+            { name: "안녕 충청 베어리스타 키체인", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2024/07/[9300000005103]_20240718103112352.jpg", category: "keychain" },
+
+            { name: "우리나라 도자 마그넷 세트", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2020/02/[9300000001766]_20200221093437465.jpg", category: "keychain" },
+            { name: "이한철-매화서옥도 패브릭포스터", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2025/01/[9300000005596]_20250108144410213.jpg", category: "keychain" },
+            { name: "캠퍼스 베어리 그립톡", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2025/02/[9300000005480]_20250211151647322.jpg", category: "keychain" },
+            { name: "캠퍼스 베어리 랩탑 파우치 13인치", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2025/02/[9300000005483]_20250211144704815.jpg", category: "bag" },
+            { name: "캠퍼스 베어리 파우치 키링", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2025/02/[9300000005485]_20250211145458854.jpg", category: "keychain" },
+            { name: "캠퍼스 베어리 펜슬 케이스", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2025/02/[9300000005482]_20250211144443075.jpg", category: "keychain" },
+            { name: "캠퍼스 베어리스타 키링", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2025/02/[9300000005484]_20250211144944158.jpg", category: "keychain" },
+            { name: "플레이 블루 스트로캡 세트 (3P)", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2025/02/[9300000005777]_20250214131002360.jpg", category: "tumbler" },
+            { name: "플레이 키즈 스푼 포크 세트", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2025/02/[9300000005759]_20250212124924359.jpg", category: "tumbler" },
+            { name: "플레이 핑크 스트로캡 세트 (3P)", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2025/02/[9300000005778]_20250214131333201.jpg", category: "tumbler" },
+            { name: "호작도 베어리스타 키체인", img: "https://image.istarbucks.co.kr/upload/store/skuimg/2024/06/[9300000005093]_20240604132409476.jpg", category: "keychain" }
+
+        ];
+
+        let filteredGoods = [...goodsList];
+        const itemsPerPage = 12;
+        let currentPage = 1;
+
+        function filterProducts() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const categoryFilter = document.getElementById('categoryFilter').value;
+
+            filteredGoods = goodsList.filter(item => {
+                const matchesSearch = item.name.toLowerCase().includes(searchInput);
+                const matchesCategory = categoryFilter === "all" || item.category === categoryFilter;
+                return matchesSearch && matchesCategory;
+            });
+
+            currentPage = 1;
+            renderPage();
+        }
+
+        function renderPage() {
+            const heroesContainer = document.getElementById('heroes-container');
+            const pageNumber = document.getElementById('pageNumber');
+            heroesContainer.innerHTML = '';
+
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const currentItems = filteredGoods.slice(startIndex, startIndex + itemsPerPage);
+
+            currentItems.forEach(item => {
+                const hero = document.createElement('div');
+                hero.classList.add('hero');
+                hero.innerHTML = `
+                    <div>
+                        <img src="${item.img}" alt="${item.name}" class="thumbnail" onclick="openZoomModal('${item.img}')">
+                        <p class="name">${item.name}</p>
+                    </div>
+                `;
+                heroesContainer.appendChild(hero);
+            });
+
+            pageNumber.textContent = `${currentPage} / ${Math.ceil(filteredGoods.length / itemsPerPage)}`;
+        }
+
+        let scale = 1;
+
+        function openZoomModal(imgSrc) {
+            const zoomModal = document.getElementById('zoomModal');
+            const zoomImage = document.getElementById('zoomImage');
+            zoomImage.src = imgSrc;
+            zoomModal.style.display = 'flex';
+        }
+
+        function closeZoomModal() {
+            const zoomModal = document.getElementById('zoomModal');
+            zoomModal.style.display = 'none';
+            scale = 1; // Reset scale when closing modal
+        }
+
+        function zoomIn() {
+            scale += 0.1;
+            document.getElementById('zoomImage').style.transform = `scale(${scale})`;
+        }
+
+        function zoomOut() {
+            scale -= 0.1;
+            if (scale < 0.1) scale = 0.1;
+            document.getElementById('zoomImage').style.transform = `scale(${scale})`;
+        }
+
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderPage();
+            }
+        });
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (currentPage < Math.ceil(filteredGoods.length / itemsPerPage)) {
+                currentPage++;
+                renderPage();
+            }
+        });
+
+        // 클릭 시 모달 닫기 (배경 클릭 시)
+        window.onclick = (event) => {
+            const zoomModal = document.getElementById('zoomModal');
+            if (event.target === zoomModal) {
+                closeZoomModal();
+            }
+        };
+
+        window.onload = () => {
+            renderPage();
+        };
+    </script>
+</body>
+</html>
